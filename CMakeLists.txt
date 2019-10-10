@@ -7,8 +7,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SSE_FLAGS} -march=native  -std=c++0x") 
-
-#include_directories(/home/itam/aws-sdk-cpp /home/itam/aws-sdk-cpp/aws-cpp-sdk-core/include /home/itam/aws_deps/ /home/itam/aws-c-event-stream/cmake/)
 include_directories(/home/itam/aws-sdk-cpp /home/itam/aws-sdk-cpp/aws-cpp-sdk-core/include)
 
 set(aws-sdk-cpp_DIR $ENV{AWS_SDK_CPP_DIR})
