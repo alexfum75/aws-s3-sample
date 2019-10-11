@@ -12,54 +12,54 @@ static const char* BUCKET = "s3-cpp-sample-bucket";
 
 int main()
 {
-	Aws::SDKOptions options;
-	Aws::InitAPI(options);
-	{
-		S3Client client;
+    Aws::SDKOptions options;
+    Aws::InitAPI(options);
+    {
+        S3Client client;
 
-		//first put an object into s3
-		PutObjectRequest putObjectRequest;
-		putObjectRequest.WithKey(KEY)
-			.WithBucket(BUCKET);
+        //first put an object into s3
+        PutObjectRequest putObjectRequest;
+        putObjectRequest.WithKey(KEY)
+            .WithBucket(BUCKET);
 
-		//this can be any arbitrary stream (e.g. fstream, stringstream etc...)
-		auto requestStream = Aws::MakeShared<Aws::StringStream>("s3-sample");
-		*requestStream << "Hello World!";
+        //this can be any arbitrary stream (e.g. fstream, stringstream etc...)
+        auto requestStream = Aws::MakeShared<Aws::StringStream>("s3-sample");
+        *requestStream << "Hello World!";
 
-		//set the stream that will be put to s3
-		putObjectRequest.SetBody(requestStream);
+        //set the stream that will be put to s3
+        putObjectRequest.SetBody(requestStream);
 
-		auto putObjectOutcome = client.PutObject(putObjectRequest);
+        auto putObjectOutcome = client.PutObject(putObjectRequest);
 
-		if(putObjectOutcome.IsSuccess())
-		{
-			std::cout << "Put object succeeded" << std::endl;
-		}
-		else
-		{
-			std::cout << "Error while putting Object " << putObjectOutcome.GetError().GetExceptionName() << 
-				" " << putObjectOutcome.GetError().GetMessage() << std::endl;
-		}
+        if(putObjectOutcome.IsSuccess())
+        {
+            std::cout << "Put object succeeded" << std::endl;
+        }
+        else
+        {
+            std::cout << "Error while putting Object " << putObjectOutcome.GetError().GetExceptionName() << 
+                " " << putObjectOutcome.GetError().GetMessage() << std::endl;
+        }
 
-		//now get the object back out of s3. The response stream can be overridden here if you want it to go directly to 
-		// a file. In this case the default string buf is exactly what we want.
-		GetObjectRequest getObjectRequest;
-		getObjectRequest.WithBucket(BUCKET)
-			.WithKey(KEY);
+        //now get the object back out of s3. The response stream can be overridden here if you want it to go directly to 
+        // a file. In this case the default string buf is exactly what we want.
+        GetObjectRequest getObjectRequest;
+        getObjectRequest.WithBucket(BUCKET)
+            .WithKey(KEY);
 
-		auto getObjectOutcome = client.GetObject(getObjectRequest);
+        auto getObjectOutcome = client.GetObject(getObjectRequest);
 
-		if(getObjectOutcome.IsSuccess())
-		{
-			std::cout << "Successfully retrieved object from s3 with value: " << std::endl;
-			std::cout << getObjectOutcome.GetResult().GetBody().rdbuf() << std::endl << std::endl;;  
-		}
-		else
-		{
-			std::cout << "Error while getting object " << getObjectOutcome.GetError().GetExceptionName() <<
-				" " << getObjectOutcome.GetError().GetMessage() << std::endl;
-		}
-	}
-	Aws::ShutdownAPI(options);
-	return 0;  
+        if(getObjectOutcome.IsSuccess())
+        {
+            std::cout << "Successfully retrieved object from s3 with value: " << std::endl;
+            std::cout << getObjectOutcome.GetResult().GetBody().rdbuf() << std::endl << std::endl;;  
+        }
+        else
+        {
+            std::cout << "Error while getting object " << getObjectOutcome.GetError().GetExceptionName() <<
+                " " << getObjectOutcome.GetError().GetMessage() << std::endl;
+        }
+    }
+    Aws::ShutdownAPI(options);
+    return 0;  
 }
